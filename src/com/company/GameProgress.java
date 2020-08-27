@@ -1,6 +1,7 @@
 package com.company;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -28,33 +29,37 @@ public class GameProgress implements Serializable {
         }
     }
 
-    public void zipGame(String fileName, List<String> listFiles) {
-        try (ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(fileName))) {
-            for (String file : listFiles) {
+    public static List<File> listGame(String path) {
+        File file = new File(path);
+        File[] ff = file.listFiles();
+        List<File> f = Arrays.asList(ff);
+        return f;
+    }
+
+    public void zipGame(String path) {
+        try (ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(path))) {
+            for (File file : listGame("C://Games/savegames/")) {
+                if (file.getName().endsWith(".zip")) continue;
                 try (FileInputStream fis = new FileInputStream(file)) {
-                    ZipEntry entry = new ZipEntry(file.substring(file.lastIndexOf('/')));
+                    ZipEntry entry = new ZipEntry(file.getName());
                     zout.putNextEntry(entry);
-                    byte[] b = new byte[fis.available()];
-                    fis.read(b);
-                    zout.write(b);
+                    byte[] buffer = new byte[fis.available()];
+                    fis.read(buffer);
+                    zout.write(buffer);
                     zout.closeEntry();
-                    System.out.println("Done fis");
+                    System.out.println("done fis");
                 } catch (IOException e) {
-                    System.out.println("Error fis!");
-                    ;
+                    System.out.println("error fis");
                 }
             }
-            System.out.println("Done zip");
+            System.out.println("done zip");
         } catch (IOException e) {
-            System.out.println("Error zip");
-            ;
+            System.out.println("error zip");
         }
     }
 
     public void del() {
-        File file = new File("C://Games/savegames/");
-        File[] ff = file.listFiles();
-        for (File list : ff) {
+        for (File list : listGame("C://Games/savegames/")) {
             String name = list.getName();
             String type = name.substring(name.lastIndexOf('.'));
             if (type.equals(".txt")) {

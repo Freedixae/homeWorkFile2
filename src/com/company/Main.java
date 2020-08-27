@@ -1,7 +1,5 @@
 package com.company;
 
-import java.util.ArrayList;
-
 public class Main {
 
     public static void main(String[] args) {
@@ -13,13 +11,7 @@ public class Main {
         playerTwo.saveGame("C://Games/savegames/save2.txt", playerTwo);
         playerThree.saveGame("C://Games/savegames/save3.txt", playerThree);
 
-        ArrayList<String> listGame = new ArrayList<>();
-        listGame.add("C://Games/savegames/save.txt");
-        listGame.add("C://Games/savegames/save2.txt");
-        listGame.add("C://Games/savegames/save3.txt");
-
-        playerOne.zipGame("C://Games/savegames/save.zip", listGame);
-
+        playerOne.zipGame("C://Games/savegames/save.zip");
         playerOne.del();
     }
 }
